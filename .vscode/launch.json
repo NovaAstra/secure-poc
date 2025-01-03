@@ -8,6 +8,14 @@
       "mainClass": "com.nebula.core.CoreApplication",
       "projectName": "core",
       "cwd": "${workspaceFolder}/core"
+    },
+    {
+      "type": "java",
+      "name": "Gateway App",
+      "request": "launch",
+      "mainClass": "com.nebula.core.GatewayApplication",
+      "projectName": "gateway",
+      "cwd": "${workspaceFolder}/gateway"
     }
   ]
 }
