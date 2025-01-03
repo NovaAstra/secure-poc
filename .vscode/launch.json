@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Core App",
+      "request": "launch",
+      "mainClass": "com.nebula.core.CoreApplication",
+      "projectName": "core",
+      "cwd": "${workspaceFolder}/core"
+    }
+  ]
+}
