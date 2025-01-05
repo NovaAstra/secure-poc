@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import cn.hutool.core.collection.CollUtil;
 
 @Component
-public class RedisUtil {
+public class RedisUtils {
   private final RedisTemplate<Object, Object> redisTemplate;
 
-  public RedisUtil(RedisTemplate<Object, Object> redisTemplate) {
+  public RedisUtils(RedisTemplate<Object, Object> redisTemplate) {
     this.redisTemplate = redisTemplate;
   }
 

@@ -1,0 +1,17 @@
+server:
+  port: 8092
+  servlet:
+    context-path: /api/public
+spring:
+  application:
+    name: interface
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+      discovery:
+        server-addr: localhost:8848
+        service: interface
