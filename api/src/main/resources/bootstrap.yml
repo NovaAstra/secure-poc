@@ -4,7 +4,7 @@ server:
     context-path: /api/public
 spring:
   application:
-    name: interface
+    name: api
   main:
     web-application-type: reactive
   cloud:
@@ -14,4 +14,4 @@ spring:
         file-extension: yaml
       discovery:
         server-addr: localhost:8848
-        service: interface
+        service: api

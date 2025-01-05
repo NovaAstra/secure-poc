@@ -7,6 +7,7 @@
   "java.compile.nullAnalysis.mode": "automatic",
    "java.jdt.ls.java.home": "D:\\Java\\jdk-21",
   "java.project.sourcePaths": [
+    "api/src/main/java",
     "client/src/main/java",
     "common/src/main/java",
     "core/src/main/java",

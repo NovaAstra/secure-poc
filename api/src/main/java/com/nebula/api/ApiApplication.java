@@ -1,4 +1,4 @@
-package com.nebula.interface;
+package com.nebula.api;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -7,12 +7,12 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@MapperScan("com.nebula.interface.mapper")
+@MapperScan("com.nebula.api.mapper")
 @SpringBootApplication
 @EnableDiscoveryClient
-public class InterfaceApplication {
+public class ApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(InterfaceApplication.class, args);
+		SpringApplication.run(ApiApplication.class, args);
 	}
 }
