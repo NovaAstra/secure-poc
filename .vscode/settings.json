@@ -1,9 +1,27 @@
 {
+  "window.zoomLevel": 2,
+  
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.wrapper.enabled": true,
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.compile.nullAnalysis.mode": "automatic",
+   "java.jdt.ls.java.home": "D:\\Java\\jdk-21",
   "java.project.sourcePaths": [
     "common/src/main/java",
     "core/src/main/java",
     "gateway/src/main/java",
   ],
+
+  "terminal.integrated.profiles.windows": {
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "icon": "terminal-cmd"
+    },
+    "PowerShell 7": {
+      "path": "D:\\PowerShell\\7\\pwsh.exe"
+    }
+  }
 }

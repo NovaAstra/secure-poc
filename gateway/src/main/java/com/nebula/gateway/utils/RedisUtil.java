@@ -1,20 +1,15 @@
-package com.nebula.core.utils;
-
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
-import cn.hutool.core.collection.CollUtil;
+package com.nebula.gateway.utils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Redis 工具类，封装常用 Redis 操作
- */
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+
+import cn.hutool.core.collection.CollUtil;
+
 @Component
 public class RedisUtil {
-
   private final RedisTemplate<Object, Object> redisTemplate;
 
   public RedisUtil(RedisTemplate<Object, Object> redisTemplate) {
@@ -103,6 +98,27 @@ public class RedisUtil {
         return Boolean.TRUE.equals(redisTemplate.expire(key, time, TimeUnit.SECONDS));
       }
       return false;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  /**
+   * 设置缓存值（如果键不存在）
+   *
+   * @param key   键
+   * @param value 值
+   * @param time  过期时间（秒）
+   * @return 是否设置成功
+   */
+  public boolean setIfAbsent(Object key, Object value, long time) {
+    try {
+      if (time > 0) {
+        return Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(key, value, time, TimeUnit.SECONDS));
+      } else {
+        return Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(key, value));
+      }
     } catch (Exception e) {
       e.printStackTrace();
       return false;
