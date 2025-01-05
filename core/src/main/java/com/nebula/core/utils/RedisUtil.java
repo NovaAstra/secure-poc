@@ -2,7 +2,6 @@ package com.nebula.core.utils;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import cn.hutool.core.collection.CollUtil;
 

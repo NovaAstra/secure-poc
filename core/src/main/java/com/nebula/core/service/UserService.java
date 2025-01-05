@@ -9,6 +9,10 @@ import com.nebula.common.model.entity.User;
 public interface UserService extends IService<User> {
   public String userRegister(String userAccount, String userPassword, String confirmPassword, String code);
 
+  public User getInvokeUser(String accessKey);
+
+  public User getUserByToken(String token);
+
   // public User userLogin(String userAccount, String userPassword);
 
   // public boolean userLogout(HttpServletRequest request);

@@ -34,8 +34,9 @@ public class RedisConfig {
     template.setKeySerializer(new StringRedisSerializer());
 
     // 配置 Value 的序列化器
-    Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(createObjectMapper(),
-        Object.class);
+    Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+    serializer.setObjectMapper(createObjectMapper());
+
     template.setValueSerializer(serializer);
     template.setHashKeySerializer(serializer);
     template.setHashValueSerializer(serializer);
@@ -49,7 +50,8 @@ public class RedisConfig {
    *
    * @return 配置好的 ObjectMapper
    */
-  private ObjectMapper createObjectMapper() {
+  @Bean
+  public ObjectMapper objectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
 
@@ -60,5 +62,14 @@ public class RedisConfig {
     objectMapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_CONCRETE_AND_ARRAYS);
 
     return objectMapper;
+  }
+
+  /**
+   * 创建并配置 ObjectMapper
+   *
+   * @return 配置好的 ObjectMapper
+   */
+  private ObjectMapper createObjectMapper() {
+    return objectMapper();
   }
 }

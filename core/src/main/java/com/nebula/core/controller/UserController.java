@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
 
   private final UserService userService;
@@ -22,18 +22,18 @@ public class UserController {
     this.userService = userService;
   }
 
-  @PostMapping("register")
+  @PostMapping("/register")
   public BaseResponse<String> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
-    if (userRegisterRequest == null) {
-      throw new BusinessException(ErrorCode.PARAMS_ERROR);
-    }
+    // if (userRegisterRequest == null) {
+    //   throw new BusinessException(ErrorCode.PARAMS_ERROR);
+    // }
 
-    String userAccount = userRegisterRequest.getUserAccount();
-    String userPassword = userRegisterRequest.getUserPassword();
-    String confirmPassword = userRegisterRequest.getConfirmPassword();
-    String code = userRegisterRequest.getCode();
+    // String userAccount = userRegisterRequest.getUserAccount();
+    // String userPassword = userRegisterRequest.getUserPassword();
+    // String confirmPassword = userRegisterRequest.getConfirmPassword();
+    // String code = userRegisterRequest.getCode();
 
-    String result = userService.userRegister(userAccount, userPassword, confirmPassword, code);
-    return ResultUtils.success(result);
+    // String result = userService.userRegister(userAccount, userPassword, confirmPassword, code);
+    return ResultUtils.success("asdas");
   }
 }

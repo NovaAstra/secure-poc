@@ -1,5 +1,6 @@
 package com.nebula.core.service.impl;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -14,8 +15,13 @@ import com.nebula.core.utils.RedisUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.json.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Service
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
   private final UserMapper userMapper;
 
   private final RedisUtil redisUtil;
@@ -25,6 +31,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
   public UserServiceImpl(UserMapper userMapper, RedisUtil redisUtil) {
     this.userMapper = userMapper;
     this.redisUtil = redisUtil;
+  }
+
+  @Override
+  public User getInvokeUser(String accessKey) {
+    if (StrUtil.isBlank(accessKey)) {
+      throw new BusinessException(ErrorCode.PARAMS_ERROR);
+    }
+
+    return userMapper.selectOne(new QueryWrapper<User>().lambda()
+        .eq(User::getAccessKey, accessKey));
+  }
+
+  @Override
+  public User getUserByToken(String token) {
+    if (StrUtil.isBlank(token)) {
+      throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+    }
+
+    // 从 Redis 中获取用户信息
+    String userJson = (String) redisUtil.get("session:" + token);
+    if (StrUtil.isBlank(userJson)) {
+      throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+    }
+
+    return JSONUtil.toBean(userJson, User.class);
   }
 
   @Override

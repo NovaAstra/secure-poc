@@ -8,28 +8,29 @@ spring:
   cloud:
     nacos:
       config:
-        # server-addr: 192.168.0.203:8848
-        server-addr: 192.168.0.65:8848
+        server-addr: localhost:8848
         file-extension: yaml
       discovery:
-        # server-addr: 192.168.0.203:8848
-        server-addr: 192.168.0.65:8848
+        server-addr: localhost:8848
         service: core
   datasource:
-    url: jdbc:mysql://localhost:3306/api-demo
+    url: jdbc:mysql://localhost:3306/secure-poc
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: localhost
     port: 6379
     database: 0
 mybatis-plus:
-  mapper-locations: mapper/*.xml
   configuration:
-    cache-enabled: true
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
+      logic-delete-field: isDelet
       id-type: auto
       table-prefix: t_
+mybatis:
+  typeAliasesPackage: com.nebula.common.**.entity
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  configLocation: classpath:mybatis/mybatis-config.xml

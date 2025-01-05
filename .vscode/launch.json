@@ -13,7 +13,7 @@
       "type": "java",
       "name": "Gateway App",
       "request": "launch",
-      "mainClass": "com.nebula.core.GatewayApplication",
+      "mainClass": "com.nebula.gateway.GatewayApplication",
       "projectName": "gateway",
       "cwd": "${workspaceFolder}/gateway"
     }
