@@ -5,7 +5,7 @@
   "java.import.gradle.wrapper.enabled": true,
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.compile.nullAnalysis.mode": "automatic",
-   "java.jdt.ls.java.home": "D:\\Java\\jdk-21",
+  // "java.jdt.ls.java.home": "D:\\Java\\jdk-21",
   "java.project.sourcePaths": [
     "api/src/main/java",
     "client/src/main/java",
