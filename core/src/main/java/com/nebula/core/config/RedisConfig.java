@@ -13,18 +13,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-/**
- * Redis 配置类
- */
 @Configuration
 public class RedisConfig {
 
-  /**
-   * 配置 RedisTemplate，使用 Jackson2JsonRedisSerializer 作为序列化器
-   *
-   * @param redisConnectionFactory Redis 连接工厂
-   * @return 配置好的 RedisTemplate
-   */
   @Bean
   public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
     RedisTemplate<Object, Object> template = new RedisTemplate<>();
@@ -45,17 +36,11 @@ public class RedisConfig {
     return template;
   }
 
-  /**
-   * 创建并配置 ObjectMapper
-   *
-   * @return 配置好的 ObjectMapper
-   */
   @Bean
   public ObjectMapper objectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
 
-    // 配置多态类型支持
     PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
         .allowIfBaseType(Object.class)
         .build();
@@ -64,11 +49,6 @@ public class RedisConfig {
     return objectMapper;
   }
 
-  /**
-   * 创建并配置 ObjectMapper
-   *
-   * @return 配置好的 ObjectMapper
-   */
   private ObjectMapper createObjectMapper() {
     return objectMapper();
   }
