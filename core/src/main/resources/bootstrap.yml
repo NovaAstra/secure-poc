@@ -14,7 +14,7 @@ spring:
         server-addr: localhost:8848
         service: core
   datasource:
-    url: jdbc:mysql://localhost:3306/secure-poc
+    url: jdbc:mysql://localhost:3306/secure-poc?useSSL=false&serverTimezone=UTC
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,13 +23,19 @@ spring:
     database: 0
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: false
+    cache-enabled: true
+    default-statement-timeout: 60
+    map-underscore-to-camel-case: true
+    use-generated-keys: false
+    lazy-loading-enabled: true
+    call-setters-on-nulls: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
+    banner: false
     db-config:
       logic-delete-field: isDelet
-      id-type: auto
-      table-prefix: t_
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 mybatis:
   typeAliasesPackage: com.nebula.common.**.entity
   mapperLocations: classpath*:mapper/**/*Mapper.xml

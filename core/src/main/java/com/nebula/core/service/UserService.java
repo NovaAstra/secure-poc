@@ -7,13 +7,11 @@ import com.nebula.common.model.entity.User;
 import com.nebula.core.model.vo.UserSecretVO;
 
 public interface UserService extends IService<User> {
-  public String userRegister(String userAccount, String userPassword, String confirmPassword, String code);
+  public Long userRegister(String userAccount, String userPassword, String confirmPassword);
 
   public User userLogin(String userAccount, String userPassword);
 
   public User getUserByToken(String token);
-
-  public boolean userLogout(HttpServletRequest request);
 
   public UserSecretVO genKey(HttpServletRequest request);
 }

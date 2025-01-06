@@ -23,17 +23,16 @@ public class UserController {
   }
 
   @PostMapping("/register")
-  public BaseResponse<String> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
-    // if (userRegisterRequest == null) {
-    //   throw new BusinessException(ErrorCode.PARAMS_ERROR);
-    // }
+  public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+    if (userRegisterRequest == null) {
+      throw new BusinessException(ErrorCode.PARAMS_ERROR);
+    }
 
-    // String userAccount = userRegisterRequest.getUserAccount();
-    // String userPassword = userRegisterRequest.getUserPassword();
-    // String confirmPassword = userRegisterRequest.getConfirmPassword();
-    // String code = userRegisterRequest.getCode();
+    String userAccount = userRegisterRequest.getUserAccount();
+    String userPassword = userRegisterRequest.getUserPassword();
+    String confirmPassword = userRegisterRequest.getConfirmPassword();
 
-    // String result = userService.userRegister(userAccount, userPassword, confirmPassword, code);
-    return ResultUtils.success("asdas");
+    Long result = userService.userRegister(userAccount, userPassword, confirmPassword);
+    return ResultUtils.success(result);
   }
 }

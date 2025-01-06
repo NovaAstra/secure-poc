@@ -64,7 +64,8 @@ subprojects {
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
 
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
-
+    
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.1'
     implementation 'mysql:mysql-connector-java'
 

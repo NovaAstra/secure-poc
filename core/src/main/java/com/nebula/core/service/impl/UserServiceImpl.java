@@ -41,24 +41,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
   }
 
   @Override
-  public String userRegister(String userAccount, String userPassword, String confirmPassword, String code) {
-    String redisKey = userAccount + ":code";
-
-    if (StrUtil.hasBlank(userAccount, userPassword, confirmPassword)) {
-      throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
-    }
+  public Long userRegister(String userAccount, String userPassword, String confirmPassword) {
 
     if (!userPassword.equals(confirmPassword)) {
-      throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
-    }
-
-    String codeFromRedis = (String) redisUtil.get(redisKey);
-    if (!codeFromRedis.equals(code)) {
-      throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码错误");
+      throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码不一致");
     }
 
     synchronized (userAccount.intern()) {
-
       QueryWrapper<User> queryWrapper = new QueryWrapper<>();
       queryWrapper.eq("userAccount", userAccount);
       long count = userMapper.selectCount(queryWrapper);
@@ -97,15 +86,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     User user = userMapper.selectOne(queryWrapper);
 
     if (user == null) {
-      log.info("user login failed, userAccount cannot match userPassword");
       throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
     }
     return user;
-  }
-
-  @Override
-  public boolean userLogout(HttpServletRequest request) {
-    return true;
   }
 
   @Override
@@ -128,21 +111,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     if (StrUtil.isBlank(userId)) {
       throw new BusinessException(ErrorCode.OPERATION_ERROR, "用户ID不能为空");
     }
-    UserSecretVO userDevKeyVO = this.genKey(userId);
+    UserSecretVO userSecretVO = this.genKey(userId);
     UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("id", userId);
-    updateWrapper.set("accessKey", userDevKeyVO.getAccessKey());
-    updateWrapper.set("secretKey", userDevKeyVO.getSecretKey());
+    updateWrapper.set("accessKey", userSecretVO.getAccessKey());
+    updateWrapper.set("secretKey", userSecretVO.getSecretKey());
     this.update(updateWrapper);
-    return userDevKeyVO;
+    return userSecretVO;
   }
 
   private UserSecretVO genKey(String userAccount) {
     String accessKey = DigestUtil.md5Hex(SALT + userAccount + RandomUtil.randomNumbers(5));
     String secretKey = DigestUtil.md5Hex(SALT + userAccount + RandomUtil.randomNumbers(8));
-    UserSecretVO userDevKeyVO = new UserSecretVO();
-    userDevKeyVO.setAccessKey(accessKey);
-    userDevKeyVO.setSecretKey(secretKey);
-    return userDevKeyVO;
+    UserSecretVO userSecretVO = new UserSecretVO();
+    userSecretVO.setAccessKey(accessKey);
+    userSecretVO.setSecretKey(secretKey);
+    return userSecretVO;
   }
 }

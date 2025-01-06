@@ -1,32 +1,38 @@
 package com.nebula.common.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
-
+import java.time.LocalDateTime;
 @TableName(value = "user")
 @Data
+
 public class User implements Serializable {
 
   @TableId(type = IdType.AUTO)
-  private String id;
+  private Long id;
 
-  private String userName;
-
+  @TableField("user_account")
   private String userAccount;
 
+  @TableField("user_password")
   private String userPassword;
 
+  @TableField("access_key")
   private String accessKey;
 
+  @TableField("secret_key")
   private String secretKey;
 
-  private Date createTime;
+  @TableField("create_time")
+  private LocalDateTime createTime;
 
-  private Date updateTime;
+  @TableField("update_time")
+  private LocalDateTime updateTime;
 
+  @TableField("is_delete")
   @TableLogic
   private Integer isDelete;
 
