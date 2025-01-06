@@ -23,12 +23,7 @@ spring:
     database: 0
 mybatis-plus:
   configuration:
-    cache-enabled: true
-    default-statement-timeout: 60
     map-underscore-to-camel-case: true
-    use-generated-keys: false
-    lazy-loading-enabled: true
-    call-setters-on-nulls: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false

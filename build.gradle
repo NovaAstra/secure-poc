@@ -11,8 +11,8 @@ group = 'com.nebula'
 version = '1.0-SNAPSHOT'
 
 java {
-	// sourceCompatibility = '21'
-	sourceCompatibility = '11'
+	sourceCompatibility = '21'
+	// sourceCompatibility = '11'
 }
 
 configurations {
@@ -63,6 +63,10 @@ subprojects {
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
 
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
     
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
@@ -72,7 +76,7 @@ subprojects {
 		implementation 'cn.hutool:hutool-all:5.8.9'
 
 		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
 		annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
@@ -89,4 +93,8 @@ subprojects {
         mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
     }
 	}
+
+  tasks.withType(JavaCompile) {
+    options.annotationProcessorPath = configurations.annotationProcessor
+  }
 }

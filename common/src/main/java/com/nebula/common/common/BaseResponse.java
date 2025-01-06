@@ -1,12 +1,10 @@
 package com.nebula.common.common;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
 @Data
-@Accessors(chain = true)
 public class BaseResponse<T> implements Serializable {
 
   private int code;

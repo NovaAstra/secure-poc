@@ -41,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
   }
 
   @Override
-  public Long userRegister(String userAccount, String userPassword, String confirmPassword) {
+  public long userRegister(String userAccount, String userPassword, String confirmPassword) {
 
     if (!userPassword.equals(confirmPassword)) {
       throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码不一致");
@@ -49,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     synchronized (userAccount.intern()) {
       QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-      queryWrapper.eq("userAccount", userAccount);
+      queryWrapper.eq("user_account", userAccount);
       long count = userMapper.selectCount(queryWrapper);
       if (count > 0) {
         throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
