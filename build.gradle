@@ -11,8 +11,8 @@ group = 'com.nebula'
 version = '1.0-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
-	// sourceCompatibility = '11'
+	// sourceCompatibility = '21'
+	sourceCompatibility = '11'
 }
 
 configurations {
