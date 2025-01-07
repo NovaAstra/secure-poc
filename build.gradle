@@ -49,8 +49,6 @@ subprojects {
   dependencies {
 		implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-logging'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-		implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
 		implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 		implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 		implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'

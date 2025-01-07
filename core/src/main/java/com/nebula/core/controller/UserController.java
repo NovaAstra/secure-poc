@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.nebula.common.common.BaseResponse;
 import com.nebula.common.common.ErrorCode;
@@ -49,15 +47,12 @@ public class UserController {
   @PostMapping("/login")
   public BaseResponse<Integer> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response)
       throws NoSuchAlgorithmException {
-
     return ResultUtils.success(1);
   }
 
   @PostMapping("/gen/key")
-  public BaseResponse<UserSecretVO> genKey() {
-   HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-    UserSecretVO userSecretVO = userService.genKey(request);
+  public BaseResponse<UserSecretVO> genKey(HttpServletRequest httpServletRequest) {
+    UserSecretVO userSecretVO = userService.genKey(httpServletRequest);
     return ResultUtils.success(userSecretVO);
   }
-
 }

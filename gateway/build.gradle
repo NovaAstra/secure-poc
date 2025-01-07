@@ -1,4 +1,6 @@
 dependencies {
   implementation project(':client')
   implementation project(':common')
+
+  implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
 }

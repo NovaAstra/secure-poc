@@ -3,8 +3,6 @@ server:
 spring:
   application:
     name: core
-  main:
-    web-application-type: reactive
   cloud:
     nacos:
       config:

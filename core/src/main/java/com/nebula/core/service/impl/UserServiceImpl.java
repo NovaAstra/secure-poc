@@ -114,8 +114,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserSecretVO userSecretVO = this.genKey(userId);
     UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("id", userId);
-    updateWrapper.set("accessKey", userSecretVO.getAccessKey());
-    updateWrapper.set("secretKey", userSecretVO.getSecretKey());
+    updateWrapper.set("access_key", userSecretVO.getAccessKey());
+    updateWrapper.set("secret_key", userSecretVO.getSecretKey());
     this.update(updateWrapper);
     return userSecretVO;
   }
