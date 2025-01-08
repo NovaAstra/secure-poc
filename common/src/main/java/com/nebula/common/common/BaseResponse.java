@@ -4,11 +4,11 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @Data
-public class BaseResponse<T> {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE) 
+public class BaseResponse<T> implements Serializable {
 
   private int code;
 
@@ -16,11 +16,7 @@ public class BaseResponse<T> {
 
   private String message;
 
-  @JsonCreator
-  public BaseResponse(
-      @JsonProperty("code") int code,
-      @JsonProperty("data") T data,
-      @JsonProperty("message") String message) {
+  public BaseResponse(int code, T data, String message) {
     this.code = code;
     this.data = data;
     this.message = message;

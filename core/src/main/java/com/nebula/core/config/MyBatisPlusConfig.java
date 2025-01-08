@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 @Configuration
 @MapperScan("com.nebula.core.mapper")
 public class MyBatisPlusConfig {
+  
   @Bean
   public MybatisPlusInterceptor mybatisPlusInterceptor() {
     MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();

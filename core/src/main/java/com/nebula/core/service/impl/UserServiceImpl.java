@@ -81,8 +81,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("userAccount", userAccount);
-    queryWrapper.eq("userPassword", encryptPassword);
+    queryWrapper.eq("user_account", userAccount);
+    queryWrapper.eq("user_password", encryptPassword);
     User user = userMapper.selectOne(queryWrapper);
 
     if (user == null) {

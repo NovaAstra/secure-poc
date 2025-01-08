@@ -3,8 +3,6 @@ package com.nebula.core.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +24,9 @@ public class RedisConfig {
 
     // 配置 Value 的序列化器
     Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-    serializer.setObjectMapper(createObjectMapper());
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+    serializer.setObjectMapper(objectMapper);
 
     template.setValueSerializer(serializer);
     template.setHashKeySerializer(serializer);
@@ -34,22 +34,5 @@ public class RedisConfig {
 
     template.afterPropertiesSet();
     return template;
-  }
-
-  @Bean
-  public ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-
-    PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-        .allowIfBaseType(Object.class)
-        .build();
-    objectMapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_CONCRETE_AND_ARRAYS);
-
-    return objectMapper;
-  }
-
-  private ObjectMapper createObjectMapper() {
-    return objectMapper();
   }
 }
