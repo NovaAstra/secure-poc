@@ -1,7 +1,5 @@
 package com.nebula.core.service.impl.open;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nebula.common.common.ErrorCode;
 import com.nebula.common.exception.BusinessException;
@@ -9,10 +7,14 @@ import com.nebula.common.model.entity.User;
 import com.nebula.common.service.OpenUserService;
 import com.nebula.core.mapper.UserMapper;
 import com.nebula.core.service.UserService;
+import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.hutool.core.util.StrUtil;
 
+@DubboService
 public class OpenUserServiceImpl implements OpenUserService {
+
   @Autowired
   private UserMapper userMapper;
 

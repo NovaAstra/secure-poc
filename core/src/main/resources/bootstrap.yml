@@ -5,9 +5,6 @@ spring:
     name: core
   cloud:
     nacos:
-      config:
-        server-addr: localhost:8848
-        file-extension: yaml
       discovery:
         server-addr: localhost:8848
         service: core
@@ -33,3 +30,11 @@ mybatis:
   typeAliasesPackage: com.nebula.common.**.entity
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   configLocation: classpath:mybatis/mybatis-config.xml
+dubbo:
+  application:
+    name: core
+  registry:
+    address: nacos://localhost:8848
+  protocol:
+    name: dubbo
+    port: 20881

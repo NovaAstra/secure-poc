@@ -50,15 +50,17 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-logging'
 		implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-		// implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-		// implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.3.1.RELEASE'
     implementation('redis.clients:jedis')
 
+    implementation 'com.alibaba.nacos:nacos-client:2.1.0'
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:2021.0.4.0'
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config:2021.0.4.0'
 
-    implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
-    implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter:3.0.9'
+    implementation 'org.apache.dubbo:dubbo-registry-nacos:3.0.9'
+    implementation 'org.apache.dubbo:dubbo:3.0.9'
 
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 

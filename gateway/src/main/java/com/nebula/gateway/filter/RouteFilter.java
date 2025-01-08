@@ -20,8 +20,10 @@ import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ import reactor.core.publisher.Mono;
 @CrossOrigin(origins = "*")
 public class RouteFilter implements GlobalFilter, Ordered {
 
+  @DubboReference
   private OpenUserService openUserService;
 
   private static final String ACCESS_KEY_HEADER = "accessKey"; // 获取 accessKey
@@ -51,12 +54,13 @@ public class RouteFilter implements GlobalFilter, Ordered {
 
     // 1. 请求日志记录
     String path = request.getPath().value();
-    String method = request.getMethod().toString();
+    String method = request.getMethodValue().toString();
     log.info("请求唯一标识：{}", request.getId());
     log.info("请求路径：{}", path);
     log.info("请求方法：{}", method);
     log.info("请求参数：{}", request.getQueryParams());
-    String sourceAddress = request.getLocalAddress().getHostString();
+    InetSocketAddress localAddress = request.getLocalAddress();
+    String sourceAddress = (localAddress != null) ? localAddress.getHostString() : "unknown";
     log.info("请求来源地址：{}", sourceAddress);
     log.info("请求远程地址：{}", request.getRemoteAddress());
     ServerHttpResponse response = exchange.getResponse();
@@ -120,6 +124,8 @@ public class RouteFilter implements GlobalFilter, Ordered {
       log.error("InterfaceFilter: 签名验证失败，客户端签名：{}, 服务器生成签名：{}", sign, serverSign);
       return handleNoAuth(response);
     }
+
+    
 
     return chain.filter(exchange);
   }
