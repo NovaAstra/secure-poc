@@ -11,11 +11,11 @@
     },
     {
       "type": "java",
-      "name": "Api App",
+      "name": "Route App",
       "request": "launch",
-      "mainClass": "com.nebula.api.ApiApplication",
-      "projectName": "core",
-      "cwd": "${workspaceFolder}/api"
+      "mainClass": "com.nebula.route.RouteApplication",
+      "projectName": "route",
+      "cwd": "${workspaceFolder}/route"
     },
     {
       "type": "java",

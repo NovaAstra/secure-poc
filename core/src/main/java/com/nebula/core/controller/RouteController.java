@@ -9,5 +9,5 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/route")
 public class RouteController {
-  
+
 }

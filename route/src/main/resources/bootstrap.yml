@@ -4,7 +4,7 @@ server:
     context-path: /api/public
 spring:
   application:
-    name: api
+    name: route
   cloud:
     nacos:
       config:
@@ -12,4 +12,4 @@ spring:
         file-extension: yaml
       discovery:
         server-addr: localhost:8848
-        service: api
+        service: route
