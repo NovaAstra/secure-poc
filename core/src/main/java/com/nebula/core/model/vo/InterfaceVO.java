@@ -1,12 +1,12 @@
 package com.nebula.core.model.vo;
 
-import com.nebula.common.model.entity.Interface;
+import com.nebula.common.model.entity.Route;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class InterfaceVO extends Interface {
+public class InterfaceVO extends Route {
 
   private Integer total;
 

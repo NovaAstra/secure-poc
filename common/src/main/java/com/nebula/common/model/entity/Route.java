@@ -6,9 +6,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
-@TableName(value = "interface")
+@TableName(value = "route")
 @Data
-public class Interface implements Serializable {
+public class Route implements Serializable {
   @TableId(type = IdType.AUTO)
   private String id;
 
