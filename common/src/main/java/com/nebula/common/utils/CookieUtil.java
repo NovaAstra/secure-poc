@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
-public class CookieUtils {
+public class CookieUtil {
 
     private final static String COOKIE_NAME = "nebula_login_token";
     private static final String COOKIE_PATH = "/";

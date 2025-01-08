@@ -3,7 +3,7 @@ package com.nebula.common.utils;
 import com.nebula.common.common.BaseResponse;
 import com.nebula.common.common.ErrorCode;
 
-public class ResultUtils {
+public class ResultUtil {
 
   public static <T> BaseResponse<T> success(T data) {
     return new BaseResponse<>(0, data, "ok");

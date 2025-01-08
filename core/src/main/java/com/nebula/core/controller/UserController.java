@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nebula.common.common.BaseResponse;
 import com.nebula.common.common.ErrorCode;
-import com.nebula.common.utils.CookieUtils;
-import com.nebula.common.utils.ResultUtils;
+import com.nebula.common.utils.CookieUtil;
+import com.nebula.common.utils.ResultUtil;
 import com.nebula.common.exception.BusinessException;
 import com.nebula.common.model.entity.User;
 import com.nebula.core.model.dto.user.UserLoginRequest;
@@ -53,7 +53,7 @@ public class UserController {
 
     long result = userService.userRegister(userAccount, userPassword, confirmPassword);
 
-    return ResultUtils.success(result);
+    return ResultUtil.success(result);
   }
 
   @PostMapping("/login")
@@ -82,33 +82,33 @@ public class UserController {
     redisUtil.set(redisKey, newToken, 600);
     redisUtil.set("session:" + newToken, JSONUtil.toJsonStr(user), 600);
 
-    CookieUtils.writeLoginToken(newToken, response);
+    CookieUtil.writeLoginToken(newToken, response);
 
-    return ResultUtils.success(user);
+    return ResultUtil.success(user);
   }
 
   @PostMapping("/logout")
   public BaseResponse<Boolean> userLogout(HttpServletRequest request, HttpServletResponse response) {
 
-    String loginToken = CookieUtils.readLoginToken(request);
+    String loginToken = CookieUtil.readLoginToken(request);
     if (StrUtil.isBlank(loginToken)) {
-      return ResultUtils.error(400, "用户未登录，不可注销");
+      return ResultUtil.error(400, "用户未登录，不可注销");
     }
-    CookieUtils.deleteLoginToken(request, response);
+    CookieUtil.deleteLoginToken(request, response);
 
     String userId = request.getHeader("userId");
     String redisKey = "token:user:" + userId;
     redisUtil.delete("session:" + loginToken);
     redisUtil.delete(redisKey);
 
-    return ResultUtils.success(true);
+    return ResultUtil.success(true);
   }
 
   @GetMapping("/get/login")
   public BaseResponse<UserVO> getLoginUser(HttpServletRequest request) {
-    String loginToken = CookieUtils.readLoginToken(request);
+    String loginToken = CookieUtil.readLoginToken(request);
     if (StrUtil.isBlank(loginToken)) {
-      return ResultUtils.error(402, "用户未登录");
+      return ResultUtil.error(402, "用户未登录");
     }
 
     String userJson = (String) redisUtil.get("session:" + loginToken);
@@ -116,7 +116,7 @@ public class UserController {
     User user = JSONUtil.toBean(userJson, User.class);
     UserVO userVO = new UserVO();
     BeanUtils.copyProperties(user, userVO);
-    return ResultUtils.success(userVO);
+    return ResultUtil.success(userVO);
   }
 
   @GetMapping("/key")
@@ -135,12 +135,12 @@ public class UserController {
     UserSecretVO userDevKeyVO = new UserSecretVO();
     userDevKeyVO.setSecretKey(user.getSecretKey());
     userDevKeyVO.setAccessKey(user.getAccessKey());
-    return ResultUtils.success(userDevKeyVO);
+    return ResultUtil.success(userDevKeyVO);
   }
 
   @PostMapping("/gen/key")
   public BaseResponse<UserSecretVO> genKey(HttpServletRequest httpServletRequest) {
     UserSecretVO userSecretVO = userService.genKey(httpServletRequest);
-    return ResultUtils.success(userSecretVO);
+    return ResultUtil.success(userSecretVO);
   }
 }
