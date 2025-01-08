@@ -36,7 +36,6 @@ public class RouteFilter implements GlobalFilter, Ordered {
 
   private OpenUserService openUserService;
 
-  private static final String INTERFACE_HOST = "http://localhost:8092"; // 接口的主机地址
   private static final String ACCESS_KEY_HEADER = "accessKey"; // 获取 accessKey
   private static final String NONCE_HEADER = "nonce"; // 获取 nonce
   private static final String TIMESTAMP_HEADER = "timestamp"; // 获取时间戳
@@ -49,11 +48,9 @@ public class RouteFilter implements GlobalFilter, Ordered {
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
-    String webPath = request.getPath().value();
-    log.info("请求路径:{}", webPath);
 
     // 1. 请求日志记录
-    String path = INTERFACE_HOST + request.getPath().value();
+    String path = request.getPath().value();
     String method = request.getMethod().toString();
     log.info("请求唯一标识：{}", request.getId());
     log.info("请求路径：{}", path);
@@ -105,8 +102,8 @@ public class RouteFilter implements GlobalFilter, Ordered {
     // 5. 检查时间戳是否超时
     try {
       Long currentTime = System.currentTimeMillis() / 1000;
-      final Long FIVE_MINUTES = 60 * 5L;
-      if ((currentTime - Long.parseLong(timestamp)) >= FIVE_MINUTES) {
+      final Long ONE_MINUTES = 60 * 1L;
+      if ((currentTime - Long.parseLong(timestamp)) >= ONE_MINUTES) {
         log.error("请求超时, 时间戳超出有效范围: timestamp = {}", timestamp);
         return handleNoAuth(response);
       }
@@ -189,15 +186,9 @@ public class RouteFilter implements GlobalFilter, Ordered {
 
   @Override
   public int getOrder() {
-    return Ordered.HIGHEST_PRECEDENCE;
+    return -1;
   }
 
-  /**
-   * 处理未授权的请求
-   * 
-   * @param response
-   * @return
-   */
   public Mono<Void> handleNoAuth(ServerHttpResponse response) {
     response.setStatusCode(HttpStatus.FORBIDDEN);
     return response.setComplete();

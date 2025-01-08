@@ -105,6 +105,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     return JSONUtil.toBean(userJson, User.class);
   }
 
+
   @Override
   public UserSecretVO genKey(HttpServletRequest request) {
     String userId = request.getHeader("userId");
