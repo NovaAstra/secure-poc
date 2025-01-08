@@ -32,7 +32,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @CrossOrigin(origins = "*")
-public class ApiFilter implements GlobalFilter, Ordered {
+public class RouteFilter implements GlobalFilter, Ordered {
 
   private OpenUserService openUserService;
 
@@ -43,7 +43,7 @@ public class ApiFilter implements GlobalFilter, Ordered {
   private static final String SIGN_HEADER = "sign"; // 获取签名
   private static final String BODY_HEADER = "body"; // 获取请求体
 
-  public ApiFilter() {
+  public RouteFilter() {
   }
 
   @Override

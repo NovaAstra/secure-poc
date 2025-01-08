@@ -10,7 +10,9 @@ import java.util.Date;
 @Data
 public class Route implements Serializable {
   @TableId(type = IdType.AUTO)
-  private String id;
+  private Long id;
+
+  private String code;
 
   private String name;
 
