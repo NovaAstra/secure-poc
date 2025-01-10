@@ -23,6 +23,8 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
@@ -44,6 +46,7 @@ public class RouteFilter implements GlobalFilter, Ordered {
 
   private static final Long NONCE_EXPIRATION = 60 * 1L;
   private static final Long TIMESTAMP_EXPIRATION = 60 * 1L;
+  private static final List<String> IP_WHITELIST = Arrays.asList("localhost", "127.0.0.1");
 
   private static final String APPID_HEADER = "appId"; // 获取 appId
   private static final String ACCESS_KEY_HEADER = "accessKey"; // 获取 accessKey
@@ -72,9 +75,16 @@ public class RouteFilter implements GlobalFilter, Ordered {
     String sourceAddress = (localAddress != null) ? localAddress.getHostString() : "unknown";
     log.info("请求来源地址：{}", sourceAddress);
     log.info("请求远程地址：{}", request.getRemoteAddress());
+
     ServerHttpResponse response = exchange.getResponse();
 
-    // 2. 获取请求头信息
+    // 2. 访问控制 - 黑白名单
+    if (!IP_WHITELIST.contains(sourceAddress)) {
+      response.setStatusCode(HttpStatus.FORBIDDEN);
+      return response.setComplete();
+    }
+
+    // 3. 获取请求头信息
     HttpHeaders headers = request.getHeaders();
     String appId = headers.getFirst(APPID_HEADER);
     String accessKey = headers.getFirst(ACCESS_KEY_HEADER);

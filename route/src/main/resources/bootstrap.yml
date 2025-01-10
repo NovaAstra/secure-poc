@@ -13,3 +13,33 @@ spring:
       discovery:
         server-addr: localhost:8848
         service: route
+  datasource:
+    url: jdbc:mysql://localhost:3306/secure-poc?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    port: 6379
+    database: 0
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: isDelet
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+mybatis:
+  typeAliasesPackage: com.nebula.common.**.entity
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  configLocation: classpath:mybatis/mybatis-config.xml
+dubbo:
+  application:
+    name: core
+  registry:
+    address: nacos://localhost:8848
+  protocol:
+    name: dubbo
+    port: 20882
