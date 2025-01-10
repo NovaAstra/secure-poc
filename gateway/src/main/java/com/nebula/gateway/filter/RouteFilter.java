@@ -11,6 +11,7 @@ import org.springframework.web.server.ServerWebExchange;
 import com.nebula.common.model.entity.User;
 import com.nebula.client.utils.SignUtils;
 import com.nebula.common.service.OpenUserService;
+import com.nebula.gateway.utils.RedisUtil;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,21 +40,29 @@ public class RouteFilter implements GlobalFilter, Ordered {
   @DubboReference
   private OpenUserService openUserService;
 
+  private final RedisUtil redisUtil;
+
+  private static final Long NONCE_EXPIRATION = 60 * 1L;
+  private static final Long TIMESTAMP_EXPIRATION = 60 * 1L;
+
+  private static final String APPID_HEADER = "appId"; // 获取 appId
   private static final String ACCESS_KEY_HEADER = "accessKey"; // 获取 accessKey
   private static final String NONCE_HEADER = "nonce"; // 获取 nonce
   private static final String TIMESTAMP_HEADER = "timestamp"; // 获取时间戳
   private static final String SIGN_HEADER = "sign"; // 获取签名
   private static final String BODY_HEADER = "body"; // 获取请求体
 
-  public RouteFilter() {
+  public RouteFilter(RedisUtil redisUtil) {
+    this.redisUtil = redisUtil;
   }
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
+    String path = request.getPath().value();
+    log.info("RouterFilter: 请求路径: {}", path);
 
     // 1. 请求日志记录
-    String path = request.getPath().value();
     String method = request.getMethodValue().toString();
     log.info("请求唯一标识：{}", request.getId());
     log.info("请求路径：{}", path);
@@ -67,14 +76,14 @@ public class RouteFilter implements GlobalFilter, Ordered {
 
     // 2. 获取请求头信息
     HttpHeaders headers = request.getHeaders();
+    String appId = headers.getFirst(APPID_HEADER);
     String accessKey = headers.getFirst(ACCESS_KEY_HEADER);
     String nonce = headers.getFirst(NONCE_HEADER);
     String timestamp = headers.getFirst(TIMESTAMP_HEADER);
     String sign = headers.getFirst(SIGN_HEADER);
     String body = headers.getFirst(BODY_HEADER);
-
-    log.info("接收到请求的头部信息：accessKey = {}, nonce = {}, timestamp = {}, sign = {}, body = {}",
-        accessKey, nonce, timestamp, sign, body);
+    log.info("接收到请求头信息: appId = {}, accessKey = {}, nonce = {}, timestamp = {}, sign = {}, body = {}",
+        appId, accessKey, nonce, timestamp, sign, body);
 
     User invokeUser = null;
 
@@ -95,37 +104,41 @@ public class RouteFilter implements GlobalFilter, Ordered {
     try {
       long nonceValue = Long.parseLong(nonce);
       if (nonceValue > 10000L) {
-        log.error("nonce 超过最大值，拒绝请求：nonce = {}", nonce);
+        log.error("nonce 超过最大值, 拒绝请求: nonce = {}", nonce);
+        return handleNoAuth(response);
+      }
+
+      String redisKey = "nonce:" + nonceValue;
+      boolean isNonceUnique = redisUtil.setIfAbsent(redisKey, nonceValue, NONCE_EXPIRATION);
+      if (!isNonceUnique) {
+        log.error("nonce 已被使用, 拒绝请求: nonce = {}", nonce);
         return handleNoAuth(response);
       }
     } catch (NumberFormatException e) {
-      log.error("nonce 格式不正确", e);
+      log.error("nonce 格式不正确, 拒绝请求: nonce = {}", nonce, e);
       return handleNoAuth(response);
     }
 
     // 5. 检查时间戳是否超时
     try {
       Long currentTime = System.currentTimeMillis() / 1000;
-      final Long ONE_MINUTES = 60 * 1L;
-      if ((currentTime - Long.parseLong(timestamp)) >= ONE_MINUTES) {
+      if ((currentTime - Long.parseLong(timestamp)) >= TIMESTAMP_EXPIRATION) {
         log.error("请求超时, 时间戳超出有效范围: timestamp = {}", timestamp);
         return handleNoAuth(response);
       }
     } catch (NumberFormatException e) {
-      log.error("时间戳格式不正确", e);
+      log.error("时间戳格式不正确: timestamp = {}", timestamp, e);
       return handleNoAuth(response);
     }
 
     String secretKey = invokeUser.getSecretKey();
-    String serverSign = SignUtils.genSign(secretKey, "mspbots", timestamp, nonce, body);
+    String serverSign = SignUtils.genSign(secretKey, appId, timestamp, nonce, body);
 
     // 6. 验证签名是否匹配
     if (sign == null || !sign.equals(serverSign)) {
-      log.error("InterfaceFilter: 签名验证失败，客户端签名：{}, 服务器生成签名：{}", sign, serverSign);
+      log.error("签名验证失败，客户端签名：{}, 服务器生成签名：{}", sign, serverSign);
       return handleNoAuth(response);
     }
-
-    
 
     return chain.filter(exchange);
   }
