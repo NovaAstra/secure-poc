@@ -141,7 +141,7 @@ public class RouteFilter implements GlobalFilter, Ordered {
       return handleNoAuth(response);
     }
 
-    String secretKey = invokeUser.getSecretKey();
+    String secretKey = invokeUser.getSk();
     String serverSign = SignUtils.genSign(secretKey, appId, timestamp, nonce, body);
 
     // 6. 验证签名是否匹配
