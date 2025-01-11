@@ -10,6 +10,9 @@
       <el-form-item label="Confirm Password">
         <el-input v-model="form.confirmation" />
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">Submit</el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -22,6 +25,10 @@ const form = reactive({
   password: '',
   confirmation: ''
 })
+
+const onSubmit = () => {
+
+}
 </script>
 
 <style lang="scss" scoped>

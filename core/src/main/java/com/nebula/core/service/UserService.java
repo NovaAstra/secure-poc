@@ -11,6 +11,8 @@ public interface UserService extends IService<User> {
 
   public User userLogin(String userAccount, String userPassword);
 
+  public User getUserByAk(String ak);
+
   public User getUserByToken(String token);
 
   public UserSecretVO genKey(HttpServletRequest request);

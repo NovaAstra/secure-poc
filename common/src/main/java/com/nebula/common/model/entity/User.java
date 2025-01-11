@@ -14,13 +14,13 @@ public class User implements Serializable {
   @TableId(type = IdType.AUTO)
   private Long id;
 
-  private String userAccount;
+  private String account;
 
-  private String userPassword;
+  private String password;
 
-  private String accessKey;
+  private String ak;
 
-  private String secretKey;
+  private String sk;
 
   private LocalDateTime createTime;
 

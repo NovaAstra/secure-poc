@@ -8,6 +8,6 @@ import java.io.Serializable;
 public class UserSecretVO implements Serializable {
   private static final long serialVersionUID = 6703326011663561616L;
 
-  private String accessKey;
-  private String secretKey;
+  private String ak;
+  private String sk;
 }

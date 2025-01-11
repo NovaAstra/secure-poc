@@ -14,11 +14,5 @@ public class RouteAddRequest implements Serializable {
 
   private String url;
 
-  private String requestParams;
-
-  private String requestHeader;
-
-  private String responseHeader;
-
   private String method;
 }

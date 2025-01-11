@@ -18,15 +18,15 @@ public class Route implements Serializable {
 
   private String url;
 
-  private String requestParams;
+  private String params;
 
-  private String requestHeader;
+  private String query;
 
-  private String responseHeader;
-
-  private Integer status;
+  private String header;
 
   private String method;
+
+  private Integer status;
 
   private Date createTime;
 

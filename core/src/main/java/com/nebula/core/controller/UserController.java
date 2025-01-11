@@ -47,11 +47,11 @@ public class UserController {
       throw new BusinessException(ErrorCode.PARAMS_ERROR);
     }
 
-    String userAccount = userRegisterRequest.getUserAccount();
-    String userPassword = userRegisterRequest.getUserPassword();
-    String confirmPassword = userRegisterRequest.getConfirmPassword();
+    String account = userRegisterRequest.getAccount();
+    String password = userRegisterRequest.getPassword();
+    String confirmation = userRegisterRequest.getConfirmation();
 
-    long result = userService.userRegister(userAccount, userPassword, confirmPassword);
+    long result = userService.userRegister(account, password, confirmation);
 
     return ResultUtil.success(result);
   }
@@ -63,13 +63,13 @@ public class UserController {
       throw new BusinessException(ErrorCode.PARAMS_ERROR);
     }
 
-    String userAccount = userLoginRequest.getUserAccount();
-    String userPassword = userLoginRequest.getUserPassword();
-    if (StrUtil.hasBlank(userAccount, userPassword)) {
+    String account = userLoginRequest.getAccount();
+    String password = userLoginRequest.getPassword();
+    if (StrUtil.hasBlank(account, password)) {
       throw new BusinessException(ErrorCode.PARAMS_ERROR);
     }
 
-    User user = userService.userLogin(userAccount, userPassword);
+    User user = userService.userLogin(account, password);
     String newToken = UUID.randomUUID().toString();
 
     String redisKey = "token:user:" + user.getId();
@@ -133,8 +133,8 @@ public class UserController {
       throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
     }
     UserSecretVO userDevKeyVO = new UserSecretVO();
-    userDevKeyVO.setSecretKey(user.getSecretKey());
-    userDevKeyVO.setAccessKey(user.getAccessKey());
+    userDevKeyVO.setSk(user.getSk());
+    userDevKeyVO.setAk(user.getAk());
     return ResultUtil.success(userDevKeyVO);
   }
 

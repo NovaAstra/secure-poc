@@ -1,6 +1,6 @@
 package com.nebula.common.service;
 
-import com.nebula.common.model.entity.UserInterface;
+import com.nebula.common.model.entity.UserRoute;
 
 public interface OpenUserInterfaceService {
   
@@ -12,5 +12,5 @@ public interface OpenUserInterfaceService {
 
   boolean updateLeftNum(long interfaceId, long userId, int leftNum, int increment);
 
-  UserInterface getUserInterfaceInfo(long userId, long interfaceId);
+  UserRoute getUserInterfaceInfo(long userId, long interfaceId);
 }

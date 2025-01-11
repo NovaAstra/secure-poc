@@ -6,9 +6,15 @@ import ElementPlus from 'element-plus'
 import App from './App.vue'
 
 const routes = [
-  { path: '/login', component: () => import("./Login.vue") },
-  { path: '/register', component: () => import("./Register.vue") },
-  { path: '/route', component: () => import("./Route.vue") },
+  {
+    path: "/",
+    redirect:"/login",
+    children: [
+      { path: '/login', component: () => import("./Login.vue") },
+      { path: '/register', component: () => import("./Register.vue") },
+      { path: '/route', component: () => import("./Route.vue") },
+    ]
+  }
 ]
 
 const router = createRouter({

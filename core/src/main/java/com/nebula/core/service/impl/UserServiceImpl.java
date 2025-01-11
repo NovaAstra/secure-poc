@@ -41,29 +41,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
   }
 
   @Override
-  public long userRegister(String userAccount, String userPassword, String confirmPassword) {
+  public long userRegister(String account, String password, String confirmation) {
 
-    if (!userPassword.equals(confirmPassword)) {
+    if (StrUtil.hasBlank(account, password, confirmation)) {
+      throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+    }
+
+    if (!password.equals(confirmation)) {
       throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码不一致");
     }
 
-    synchronized (userAccount.intern()) {
+    synchronized (account.intern()) {
       QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-      queryWrapper.eq("user_account", userAccount);
+      queryWrapper.eq("user_account", account);
       long count = userMapper.selectCount(queryWrapper);
       if (count > 0) {
         throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
       }
 
-      String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-      String accessKey = DigestUtil.md5Hex(SALT + userAccount + RandomUtil.randomNumbers(5));
-      String secretKey = DigestUtil.md5Hex(SALT + userAccount + RandomUtil.randomNumbers(8));
+      String encryptPassword = DigestUtils.md5DigestAsHex((SALT + account).getBytes());
+      String accessKey = DigestUtil.md5Hex(SALT + account + RandomUtil.randomNumbers(5));
+      String secretKey = DigestUtil.md5Hex(SALT + account + RandomUtil.randomNumbers(8));
 
       User user = new User();
-      user.setUserAccount(userAccount);
-      user.setUserPassword(encryptPassword);
-      user.setAccessKey(accessKey);
-      user.setSecretKey(secretKey);
+      user.setAccount(account);
+      user.setPassword(encryptPassword);
+      user.setAk(accessKey);
+      user.setSk(secretKey);
       boolean saveResult = this.save(user);
       if (!saveResult) {
         throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
@@ -73,22 +77,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
   }
 
   @Override
-  public User userLogin(String userAccount, String userPassword) {
-
-    if (StrUtil.hasBlank(userAccount, userPassword)) {
+  public User userLogin(String account, String password) {
+    if (StrUtil.hasBlank(account, password)) {
       throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
     }
 
-    String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+    String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("user_account", userAccount);
-    queryWrapper.eq("user_password", encryptPassword);
+    queryWrapper.eq("account", account);
+    queryWrapper.eq("password", encryptPassword);
     User user = userMapper.selectOne(queryWrapper);
 
     if (user == null) {
       throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
     }
     return user;
+  }
+
+  @Override
+  public User getUserByAk(String ak) {
+    if (StrUtil.isBlank(ak)) {
+      throw new BusinessException(ErrorCode.PARAMS_ERROR);
+    }
+    QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("ak", ak);
+    return userMapper.selectOne(queryWrapper);
   }
 
   @Override
@@ -105,7 +118,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     return JSONUtil.toBean(userJson, User.class);
   }
 
-
   @Override
   public UserSecretVO genKey(HttpServletRequest request) {
     String userId = request.getHeader("userId");
@@ -115,18 +127,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserSecretVO userSecretVO = this.genKey(userId);
     UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("id", userId);
-    updateWrapper.set("access_key", userSecretVO.getAccessKey());
-    updateWrapper.set("secret_key", userSecretVO.getSecretKey());
+    updateWrapper.set("ak", userSecretVO.getAk());
+    updateWrapper.set("sk", userSecretVO.getSk());
     this.update(updateWrapper);
     return userSecretVO;
   }
 
-  private UserSecretVO genKey(String userAccount) {
-    String accessKey = DigestUtil.md5Hex(SALT + userAccount + RandomUtil.randomNumbers(5));
-    String secretKey = DigestUtil.md5Hex(SALT + userAccount + RandomUtil.randomNumbers(8));
+  private UserSecretVO genKey(String account) {
+    String ak = DigestUtil.md5Hex(SALT + account + RandomUtil.randomNumbers(5));
+    String sk = DigestUtil.md5Hex(SALT + account + RandomUtil.randomNumbers(8));
     UserSecretVO userSecretVO = new UserSecretVO();
-    userSecretVO.setAccessKey(accessKey);
-    userSecretVO.setSecretKey(secretKey);
+    userSecretVO.setAk(ak);
+    userSecretVO.setSk(sk);
     return userSecretVO;
   }
 }

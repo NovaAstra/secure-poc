@@ -6,19 +6,19 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
-@TableName(value = "user_interface")
+@TableName(value = "user_route")
 @Data
-public class UserInterface implements Serializable {
+public class UserRoute implements Serializable {
   @TableId(type = IdType.AUTO)
   private Long id;
 
   private Long userId;
 
-  private Long interfaceId;
+  private Long routeId;
 
-  private Integer total;
+  private Integer maxCalls;
 
-  private Integer remaining;
+  private Integer callCount;
 
   private Integer status;
 

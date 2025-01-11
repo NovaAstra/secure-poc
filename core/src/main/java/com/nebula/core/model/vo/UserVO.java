@@ -10,9 +10,9 @@ public class UserVO implements Serializable {
 
   private Long id;
 
-  private String userAccount;
+  private String account;
 
-  private String secretKey;
+  private String sk;
 
   private Date createTime;
 

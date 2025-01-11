@@ -39,6 +39,10 @@ public class RouteController {
 
   @PostMapping("/add")
   public BaseResponse<Long> addRoute(@RequestBody RouteAddRequest routeAddRequest, HttpServletRequest request) {
+    if (routeAddRequest == null) {
+      throw new BusinessException(ErrorCode.PARAMS_ERROR);
+    }
+
     Route route = new Route();
     BeanUtils.copyProperties(routeAddRequest, route);
 
