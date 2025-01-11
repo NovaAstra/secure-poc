@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class InterfaceVO extends Route {
+public class RouteVO extends Route {
 
   private Integer total;
 

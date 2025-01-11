@@ -5,7 +5,7 @@ import com.nebula.common.model.entity.UserRoute;
 
 import java.util.List;
 
-public interface UserInterfaceMapper extends BaseMapper<UserRoute> {
+public interface UserRouteMapper extends BaseMapper<UserRoute> {
 
   List<UserRoute> listTopInvokeInterfaceInfo(int limit);
 

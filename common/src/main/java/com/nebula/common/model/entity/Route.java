@@ -28,6 +28,8 @@ public class Route implements Serializable {
 
   private Integer status;
 
+  private Long userId;
+
   private Date createTime;
 
   private Date updateTime;
