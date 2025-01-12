@@ -8,26 +8,29 @@
         <el-input v-model="form.password" />
       </el-form-item>
       <el-form-item label="Confirm Password">
-        <el-input v-model="form.confirmation" />
+        <el-input v-model="form.confirmPassword" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="loading">Submit</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script setup lang="js">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
+const loading = ref(false)
 const form = reactive({
   account: '',
   password: '',
-  confirmation: ''
+  confirmPassword: ''
 })
 
-const onSubmit = () => {
-
+const onSubmit = async () => {
+  loading.value = true
+  await axios.post("http://localhost:8091/user/register", form)
+  loading.value = false
 }
 </script>
 

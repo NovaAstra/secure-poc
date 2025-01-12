@@ -1,24 +1,19 @@
 import 'element-plus/dist/index.css'
 
 import { createApp } from 'vue'
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createWebHashHistory, createRouter } from 'vue-router'
 import ElementPlus from 'element-plus'
 import App from './App.vue'
 
 const routes = [
-  {
-    path: "/",
-    redirect:"/login",
-    children: [
-      { path: '/login', component: () => import("./Login.vue") },
-      { path: '/register', component: () => import("./Register.vue") },
-      { path: '/route', component: () => import("./Route.vue") },
-    ]
-  }
+  { path: '/login', name: "Login", component: () => import("./Login.vue") },
+  { path: '/register', name: "Register", component: () => import("./Register.vue") },
+  { path: '/route', name: "Route", component: () => import("./Route.vue") },
+  { path: '/', redirect: '/login' }
 ]
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHashHistory(),
   routes,
 })
 

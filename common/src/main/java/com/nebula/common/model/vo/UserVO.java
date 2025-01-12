@@ -9,9 +9,7 @@ import java.util.Date;
 public class UserVO implements Serializable {
   private Long id;
 
-  private String userName;
-
-  private String userAccount;
+  private String account;
 
   private Date createTime;
 

@@ -15,16 +15,36 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SignUtils {
+public class SignUtil {
 
   private static final String HMAC_SHA256 = "HmacSHA256";
   private static final String SHA256 = "SHA-256";
   private static final int BUFFER_SIZE = 8192; // 8KB 缓冲区
 
   public static String genSign(String secretKey, String appId, String timestamp, String nonce, String body) {
-    String bodyHash = calculateBodyHash(body);
+    String sortedBody = sortBodyParameters(body); 
+    String bodyHash = calculateBodyHash(sortedBody);
     String concatenatedString = buildConcatenatedString(appId, timestamp, nonce, bodyHash);
     return generateHmacSHA256(secretKey, concatenatedString);
+  }
+
+  private static String sortBodyParameters(String body) {
+    if (body == null || body.isEmpty())
+      return "";
+
+    Map<String, String> params = new TreeMap<>();
+    String[] pairs = body.split("&");
+    for (String pair : pairs) {
+      String[] keyValue = pair.split("=");
+      if (keyValue.length == 2) {
+        params.put(keyValue[0], keyValue[1]);
+      }
+    }
+    StringBuilder sortedBody = new StringBuilder();
+    for (Map.Entry<String, String> entry : params.entrySet()) {
+      sortedBody.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+    }
+    return sortedBody.length() > 0 ? sortedBody.substring(0, sortedBody.length() - 1) : "";
   }
 
   private static String calculateBodyHash(String body) {

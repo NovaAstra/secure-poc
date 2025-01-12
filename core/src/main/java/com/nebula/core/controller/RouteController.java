@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 @RestController
 @RequestMapping("/route")
+@CrossOrigin(origins = "*")
 public class RouteController {
 
   private final RouteService routeService;
@@ -52,8 +54,6 @@ public class RouteController {
     Route route = new Route();
     BeanUtils.copyProperties(routeAddRequest, route);
     routeService.validRoute(route, true);
-    Long userId = Long.valueOf(request.getHeader("userId"));
-    route.setUserId(userId);
 
     boolean result = routeService.save(route);
 
@@ -84,10 +84,6 @@ public class RouteController {
     Route oldRoute = routeService.getById(userId);
     if (oldRoute == null) {
       throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-    }
-
-    if (!oldRoute.getUserId().equals(userId)) {
-      throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
     }
 
     boolean result = routeService.updateById(route);

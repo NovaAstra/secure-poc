@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.nebula.common.model.entity.User;
-import com.nebula.client.utils.SignUtils;
+import com.nebula.client.utils.SignUtil;
 import com.nebula.common.service.OpenUserService;
 import com.nebula.gateway.utils.RedisUtil;
 
@@ -141,8 +141,8 @@ public class RouteFilter implements GlobalFilter, Ordered {
       return handleNoAuth(response);
     }
 
-    String secretKey = invokeUser.getSk();
-    String serverSign = SignUtils.genSign(secretKey, appId, timestamp, nonce, body);
+    String secretKey = invokeUser.getSecretKey();
+    String serverSign = SignUtil.genSign(secretKey, appId, timestamp, nonce, body);
 
     // 6. 验证签名是否匹配
     if (sign == null || !sign.equals(serverSign)) {

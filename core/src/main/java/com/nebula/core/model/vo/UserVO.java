@@ -12,7 +12,7 @@ public class UserVO implements Serializable {
 
   private String account;
 
-  private String sk;
+  private String secretKey;
 
   private Date createTime;
 

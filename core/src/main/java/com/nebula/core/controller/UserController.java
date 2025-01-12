@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "*") 
 public class UserController {
 
   private final UserService userService;
@@ -49,9 +50,9 @@ public class UserController {
 
     String account = userRegisterRequest.getAccount();
     String password = userRegisterRequest.getPassword();
-    String confirmation = userRegisterRequest.getConfirmation();
+    String confirmPassword = userRegisterRequest.getConfirmPassword();
 
-    long result = userService.userRegister(account, password, confirmation);
+    long result = userService.userRegister(account, password, confirmPassword);
 
     return ResultUtil.success(result);
   }
@@ -133,8 +134,8 @@ public class UserController {
       throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
     }
     UserSecretVO userDevKeyVO = new UserSecretVO();
-    userDevKeyVO.setSk(user.getSk());
-    userDevKeyVO.setAk(user.getAk());
+    userDevKeyVO.setSecretKey(user.getSecretKey());
+    userDevKeyVO.setAccessKey(user.getAccessKey());
     return ResultUtil.success(userDevKeyVO);
   }
 

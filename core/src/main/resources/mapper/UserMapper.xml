@@ -6,10 +6,10 @@
 
     <resultMap id="BaseResultMap" type="com.nebula.common.model.entity.User">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
-        <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
-        <result property="accessKey" column="accessKey" jdbcType="VARCHAR"/>
-        <result property="secretKey" column="secretKey" jdbcType="VARCHAR"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="ak" column="ak" jdbcType="VARCHAR"/>
+        <result property="sk" column="sk" jdbcType="VARCHAR"/>
         <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
@@ -17,8 +17,12 @@
 
     <sql id="Base_Column_List">
         id,
-        userAccount,
-        userPassword,accessKey,secretKey,createTime,updateTime,
+        account,
+        password,
+        ak,
+        sk,
+        createTime,
+        updateTime,
         isDelete
     </sql>
 </mapper>
